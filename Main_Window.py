@@ -16,7 +16,8 @@ import main
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(1000, 600)
+        MainWindow.setWindowIcon(QtGui.QIcon('icon.png'))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(1)
@@ -35,36 +36,40 @@ class Ui_MainWindow(object):
 
         self.table = QtWidgets.QTableWidget()  # Create a table
         self.table.setFont(QtGui.QFont('MS Shell Dlg', 14))
-        self.table.setColumnCount(3)  # Set three columns
+        self.table.setColumnCount(4)  # Set three columns
         self.table.setRowCount(len(a))
-        self.table.setHorizontalHeaderLabels(["Имя", "Категория", "Стоимость"])
+        self.table.setHorizontalHeaderLabels(["Имя", "Категория", "Дата", "Стоимость"])
 
         self.table.horizontalHeaderItem(0).setToolTip("Column 1 ")
         self.table.horizontalHeaderItem(1).setToolTip("Column 2 ")
         self.table.horizontalHeaderItem(2).setToolTip("Column 3 ")
+        self.table.horizontalHeaderItem(3).setToolTip("Column 4 ")
+
+        self.table.setColumnWidth(0, 180)
+        self.table.setColumnWidth(1, 180)
+        self.table.setColumnWidth(2, 180)
+        self.table.setColumnWidth(3, 180)
 
         self.table.horizontalHeaderItem(0).setTextAlignment(Qt.AlignHCenter)
         self.table.horizontalHeaderItem(1).setTextAlignment(Qt.AlignHCenter)
         self.table.horizontalHeaderItem(2).setTextAlignment(Qt.AlignHCenter)
+        self.table.horizontalHeaderItem(3).setTextAlignment(Qt.AlignHCenter)
 
         for i in range(len(a)):
             self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(a[i][0]), Qt.AlignCenter))
             self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(a[i][1]), Qt.AlignCenter))
             self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(a[i][2]), Qt.AlignCenter))
+            self.table.setItem(i, 3, QtWidgets.QTableWidgetItem(str(a[i][3]), Qt.AlignCenter))
 
         group_box.addWidget(self.table)
 
-        self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
-        self.scrollArea.setLayout(group_box)
-        self.scrollArea.setGeometry(QtCore.QRect(110, 150, 561, 291))
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollArea.setFixedHeight(280)
-        self.scrollArea.setObjectName("scrollArea")
-        self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
+        self.frame = QtWidgets.QFrame(self.centralwidget)
+        self.frame.setLayout(group_box)
+        self.frame.setGeometry(QtCore.QRect(110, 150, 761, 291))
+        self.frame.setFixedHeight(280)
+        self.frame.setObjectName("scrollArea")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(170, 20, 471, 61))
+        self.label.setGeometry(QtCore.QRect(270, 20, 471, 61))
         font = QtGui.QFont()
         font.setPointSize(24)
 
@@ -72,7 +77,7 @@ class Ui_MainWindow(object):
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
         self.addButton = QtWidgets.QPushButton(self.centralwidget)
-        self.addButton.setGeometry(QtCore.QRect(632, 451, 111, 101))
+        self.addButton.setGeometry(QtCore.QRect(832, 451, 111, 101))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -85,25 +90,12 @@ class Ui_MainWindow(object):
         self.addButton.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.addButton.setObjectName("addButton")
 
-        self.updateButton = QtWidgets.QPushButton(self.centralwidget)
-        self.updateButton.setGeometry(QtCore.QRect(132, 451, 150, 70))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.addButton.sizePolicy().hasHeightForWidth())
-        self.updateButton.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setPointSize(18)
-        self.updateButton.setFont(font)
-        self.updateButton.setMouseTracking(False)
-        self.updateButton.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.updateButton.setObjectName("updateButton")
-        self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox.setGeometry(QtCore.QRect(620, 120, 171, 21))
-        font = QtGui.QFont()
-        font.setPointSize(16)
-        self.checkBox.setFont(font)
-        self.checkBox.setObjectName("checkBox")
         self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
         self.textEdit.setGeometry(QtCore.QRect(150, 120, 131, 21))
         self.textEdit.setObjectName("textEdit")
@@ -122,6 +114,22 @@ class Ui_MainWindow(object):
         font.setPointSize(13)
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
+
+        self.label_4 = QtWidgets.QLabel(self.centralwidget)
+        self.label_4.setGeometry(QtCore.QRect(650, 120, 161, 20))
+        font = QtGui.QFont()
+        font.setPointSize(13)
+        self.label_4.setFont(font)
+        self.label_4.setObjectName("label_4")
+
+        self.combo = QtWidgets.QComboBox(self.centralwidget)
+        self.combo.setGeometry(QtCore.QRect(800, 120, 161, 20))
+        self.combo.addItem(" возрастанию")
+        self.combo.addItem(" убыванию")
+        font = QtGui.QFont()
+        font.setPointSize(13)
+        self.combo.setFont(font)
+        self.combo.setObjectName("combo")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 24))
@@ -139,10 +147,9 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "Контроль денег"))
         self.label.setText(_translate("MainWindow", " Контроль денег"))
         self.addButton.setText(_translate("MainWindow", "+"))
-        self.updateButton.setText(_translate("MainWindow", "Обновить"))
-        self.checkBox.setText(_translate("MainWindow", "Отсортировать"))
         self.label_2.setText(_translate("MainWindow", "Поиск по дате:"))
         self.label_3.setText(_translate("MainWindow", "Поиск по категории:"))
+        self.label_4.setText(_translate("MainWindow", "Отсортировано по"))
 
 
 if __name__ == "__main__":
