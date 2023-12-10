@@ -24,32 +24,27 @@ class Ui_MainWindow(object):
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+        form_layout = QtWidgets.QFormLayout()
+        group_box = QtWidgets.QGroupBox()
+
+        for i in range(40):
+            form_layout.addRow(QtWidgets.QLabel("Lable"), QtWidgets.QPushButton('1'))
+
+        group_box.setLayout(form_layout)
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
+        self.scrollArea.setWidget(group_box)
         self.scrollArea.setGeometry(QtCore.QRect(110, 150, 561, 291))
-        self.scrollArea.setWidgetResizable(False)
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setFixedHeight(280)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
         self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
-        self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 559, 289))
-        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(170, 20, 471, 61))
         font = QtGui.QFont()
         font.setPointSize(24)
-
-
-
-        self.ChatMenuThird = QtWidgets.QLabel()
-        self.ChatMenuThird.setText("Проба")                  #тестовая штука
-
-        self.testH = QtWidgets.QVBoxLayout()
-
-
-        self.scrollArea.setWidgetResizable(False)
-        self.scrollArea.setLayout(self.testH)
 
 
 
