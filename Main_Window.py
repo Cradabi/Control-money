@@ -10,6 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
+import main
 
 
 class Ui_MainWindow(object):
@@ -22,31 +23,50 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
 
+        font = QtGui.QFont()
+        font.setPointSize(24)
+
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
-        form_layout = QtWidgets.QFormLayout()
-        group_box = QtWidgets.QGroupBox()
+        a = main.sort_by_cost()
 
-        for i in range(40):
-            form_layout.addRow(QtWidgets.QLabel("Lable"), QtWidgets.QPushButton('1'))
+        group_box = QtWidgets.QVBoxLayout()
 
-        group_box.setLayout(form_layout)
+        self.table = QtWidgets.QTableWidget()  # Create a table
+        self.table.setFont(QtGui.QFont('MS Shell Dlg', 14))
+        self.table.setColumnCount(3)  # Set three columns
+        self.table.setRowCount(len(a))
+        self.table.setHorizontalHeaderLabels(["Имя", "Категория", "Стоимость"])
+
+        self.table.horizontalHeaderItem(0).setToolTip("Column 1 ")
+        self.table.horizontalHeaderItem(1).setToolTip("Column 2 ")
+        self.table.horizontalHeaderItem(2).setToolTip("Column 3 ")
+
+        self.table.horizontalHeaderItem(0).setTextAlignment(Qt.AlignHCenter)
+        self.table.horizontalHeaderItem(1).setTextAlignment(Qt.AlignHCenter)
+        self.table.horizontalHeaderItem(2).setTextAlignment(Qt.AlignHCenter)
+
+        for i in range(len(a)):
+            self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(a[i][0]), Qt.AlignCenter))
+            self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(a[i][1]), Qt.AlignCenter))
+            self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(a[i][2]), Qt.AlignCenter))
+
+        group_box.addWidget(self.table)
+
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
-        self.scrollArea.setWidget(group_box)
+        self.scrollArea.setLayout(group_box)
         self.scrollArea.setGeometry(QtCore.QRect(110, 150, 561, 291))
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setFixedHeight(280)
         self.scrollArea.setObjectName("scrollArea")
-        self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scrollArea.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self.label = QtWidgets.QLabel(self.centralwidget)
         self.label.setGeometry(QtCore.QRect(170, 20, 471, 61))
         font = QtGui.QFont()
         font.setPointSize(24)
-
-
 
         self.label.setFont(font)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
@@ -125,9 +145,9 @@ class Ui_MainWindow(object):
         self.label_3.setText(_translate("MainWindow", "Поиск по категории:"))
 
 
-
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
