@@ -30,9 +30,9 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
-        a = main.sort_by_cost()
+        a = self.chng(0)
 
-        group_box = QtWidgets.QVBoxLayout()
+        self.group_box = QtWidgets.QVBoxLayout()
 
         self.table = QtWidgets.QTableWidget()  # Create a table
         self.table.setFont(QtGui.QFont('MS Shell Dlg', 14))
@@ -61,10 +61,10 @@ class Ui_MainWindow(object):
             self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(a[i][2]), Qt.AlignCenter))
             self.table.setItem(i, 3, QtWidgets.QTableWidgetItem(str(a[i][3]), Qt.AlignCenter))
 
-        group_box.addWidget(self.table)
+        self.group_box.addWidget(self.table)
 
         self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setLayout(group_box)
+        self.frame.setLayout(self.group_box)
         self.frame.setGeometry(QtCore.QRect(110, 150, 761, 291))
         self.frame.setFixedHeight(280)
         self.frame.setObjectName("scrollArea")
@@ -97,39 +97,42 @@ class Ui_MainWindow(object):
         font = QtGui.QFont()
         font.setPointSize(18)
         self.textEdit = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit.setGeometry(QtCore.QRect(150, 120, 131, 21))
+        self.textEdit.setGeometry(QtCore.QRect(150, 125, 131, 21))
         self.textEdit.setObjectName("textEdit")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(29, 120, 121, 20))
+        self.label_2.setGeometry(QtCore.QRect(29, 125, 121, 20))
         font = QtGui.QFont()
         font.setPointSize(13)
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.textEdit_2 = QtWidgets.QTextEdit(self.centralwidget)
-        self.textEdit_2.setGeometry(QtCore.QRect(470, 120, 131, 21))
+        self.textEdit_2.setGeometry(QtCore.QRect(470, 125, 131, 21))
         self.textEdit_2.setObjectName("textEdit_2")
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(300, 120, 161, 20))
+        self.label_3.setGeometry(QtCore.QRect(300, 125, 161, 20))
         font = QtGui.QFont()
         font.setPointSize(13)
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
 
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
-        self.label_4.setGeometry(QtCore.QRect(650, 120, 161, 20))
+        self.label_4.setGeometry(QtCore.QRect(650, 125, 161, 20))
         font = QtGui.QFont()
         font.setPointSize(13)
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
 
         self.combo = QtWidgets.QComboBox(self.centralwidget)
-        self.combo.setGeometry(QtCore.QRect(800, 120, 161, 20))
+        self.combo.setGeometry(QtCore.QRect(800, 120, 161, 30))
         self.combo.addItem(" возрастанию")
         self.combo.addItem(" убыванию")
         font = QtGui.QFont()
         font.setPointSize(13)
         self.combo.setFont(font)
         self.combo.setObjectName("combo")
+        self.combo.currentIndexChanged.connect(self.chng)
+        self.chng(i)
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 24))
@@ -150,6 +153,16 @@ class Ui_MainWindow(object):
         self.label_2.setText(_translate("MainWindow", "Поиск по дате:"))
         self.label_3.setText(_translate("MainWindow", "Поиск по категории:"))
         self.label_4.setText(_translate("MainWindow", "Отсортировано по"))
+
+    def chng(self, i):
+
+        if i == 0:
+            a = main.sort_by_cost()
+            return a
+
+        elif i == 1:
+            a = main.sort_by_cost_reverse()
+            return a
 
 
 if __name__ == "__main__":
