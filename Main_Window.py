@@ -10,7 +10,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
-import main
 
 
 class Ui_MainWindow(object):
@@ -30,41 +29,12 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
-        a = self.chng(0)
+        # a = self.chng(0)
 
         self.group_box = QtWidgets.QVBoxLayout()
-
-        self.table = QtWidgets.QTableWidget()  # Create a table
-        self.table.setFont(QtGui.QFont('MS Shell Dlg', 14))
-        self.table.setColumnCount(4)  # Set three columns
-        self.table.setRowCount(len(a))
-        self.table.setHorizontalHeaderLabels(["Имя", "Категория", "Дата", "Стоимость"])
-
-        self.table.horizontalHeaderItem(0).setToolTip("Column 1 ")
-        self.table.horizontalHeaderItem(1).setToolTip("Column 2 ")
-        self.table.horizontalHeaderItem(2).setToolTip("Column 3 ")
-        self.table.horizontalHeaderItem(3).setToolTip("Column 4 ")
-
-        self.table.setColumnWidth(0, 180)
-        self.table.setColumnWidth(1, 180)
-        self.table.setColumnWidth(2, 180)
-        self.table.setColumnWidth(3, 180)
-
-        self.table.horizontalHeaderItem(0).setTextAlignment(Qt.AlignHCenter)
-        self.table.horizontalHeaderItem(1).setTextAlignment(Qt.AlignHCenter)
-        self.table.horizontalHeaderItem(2).setTextAlignment(Qt.AlignHCenter)
-        self.table.horizontalHeaderItem(3).setTextAlignment(Qt.AlignHCenter)
-
-        for i in range(len(a)):
-            self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(a[i][0]), Qt.AlignCenter))
-            self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(a[i][1]), Qt.AlignCenter))
-            self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(a[i][2]), Qt.AlignCenter))
-            self.table.setItem(i, 3, QtWidgets.QTableWidgetItem(str(a[i][3]), Qt.AlignCenter))
-
-        self.group_box.addWidget(self.table)
+        self.table = QtWidgets.QTableWidget()
 
         self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setLayout(self.group_box)
         self.frame.setGeometry(QtCore.QRect(110, 150, 761, 291))
         self.frame.setFixedHeight(280)
         self.frame.setObjectName("scrollArea")
@@ -130,8 +100,8 @@ class Ui_MainWindow(object):
         font.setPointSize(13)
         self.combo.setFont(font)
         self.combo.setObjectName("combo")
-        self.combo.currentIndexChanged.connect(self.chng)
-        self.chng(i)
+        # self.combo.currentIndexChanged.connect(self.chng)
+        # self.chng(i)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -154,15 +124,7 @@ class Ui_MainWindow(object):
         self.label_3.setText(_translate("MainWindow", "Поиск по категории:"))
         self.label_4.setText(_translate("MainWindow", "Отсортировано по"))
 
-    def chng(self, i):
 
-        if i == 0:
-            a = main.sort_by_cost()
-            return a
-
-        elif i == 1:
-            a = main.sort_by_cost_reverse()
-            return a
 
 
 if __name__ == "__main__":
