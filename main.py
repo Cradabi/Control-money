@@ -11,6 +11,12 @@ class SecondWindow(QtWidgets.QMainWindow, Ui_Dialog):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.subButton.clicked.connect(self.submit)
+
+    def submit(self):
+        print(1)
+        self.text = self.textEdit.toPlainText()
+        print(self.text)
 
 
 class Main(QtWidgets.QMainWindow, Ui_MainWindow):
