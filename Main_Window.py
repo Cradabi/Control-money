@@ -29,8 +29,6 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
-        # a = self.chng(0)
-
         self.group_box = QtWidgets.QVBoxLayout()
         self.table = QtWidgets.QTableWidget()
 
@@ -127,12 +125,4 @@ class Ui_MainWindow(object):
 
 
 
-if __name__ == "__main__":
-    import sys
 
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())

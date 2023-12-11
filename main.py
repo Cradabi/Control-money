@@ -4,13 +4,23 @@ from PyQt5.QtCore import Qt
 import sys
 
 from Main_Window import Ui_MainWindow
+from Add_transaction import Ui_Dialog
+
+
+class SecondWindow(QtWidgets.QMainWindow, Ui_Dialog):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
 
 
 class Main(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(Main, self).__init__()
+        self.s = SecondWindow()
 
         self.setupUi(self)
+        self.addButton.clicked.connect(self.show_add_window)
+
         self.combo.currentIndexChanged.connect(self.chng)
 
         a = self.sort_by_cost()
@@ -34,13 +44,27 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table.horizontalHeaderItem(3).setTextAlignment(Qt.AlignHCenter)
 
         for i in range(len(a)):
-            self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(a[i][0]), Qt.AlignCenter))
-            self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(a[i][1]), Qt.AlignCenter))
-            self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(a[i][2]), Qt.AlignCenter))
-            self.table.setItem(i, 3, QtWidgets.QTableWidgetItem(str(a[i][3]), Qt.AlignCenter))
+            item1 = QtWidgets.QTableWidgetItem(str(a[i][0]))
+            item1.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
+            self.table.setItem(i, 0, item1)
+
+            item2 = QtWidgets.QTableWidgetItem(str(a[i][1]))
+            item2.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
+            self.table.setItem(i, 1, item2)
+
+            item3 = QtWidgets.QTableWidgetItem(str(a[i][2]))
+            item3.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
+            self.table.setItem(i, 2, item3)
+
+            item4 = QtWidgets.QTableWidgetItem(str(a[i][3]))
+            item4.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
+            self.table.setItem(i, 3, item4)
 
         self.group_box.addWidget(self.table)
         self.frame.setLayout(self.group_box)
+
+    def show_add_window(self):
+        self.s.show()
 
     def chng(self):
 
@@ -66,10 +90,21 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
             self.table.horizontalHeaderItem(3).setTextAlignment(Qt.AlignHCenter)
 
             for i in range(len(a)):
-                self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(a[i][0]), Qt.AlignCenter))
-                self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(a[i][1]), Qt.AlignCenter))
-                self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(a[i][2]), Qt.AlignCenter))
-                self.table.setItem(i, 3, QtWidgets.QTableWidgetItem(str(a[i][3]), Qt.AlignCenter))
+                item1 = QtWidgets.QTableWidgetItem(str(a[i][0]))
+                item1.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
+                self.table.setItem(i, 0, item1)
+
+                item2 = QtWidgets.QTableWidgetItem(str(a[i][1]))
+                item2.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
+                self.table.setItem(i, 1, item2)
+
+                item3 = QtWidgets.QTableWidgetItem(str(a[i][2]))
+                item3.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignGCenter)
+                self.table.setItem(i, 2, item3)
+
+                item4 = QtWidgets.QTableWidgetItem(str(a[i][3]))
+                item4.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
+                self.table.setItem(i, 3, item4)
 
             self.group_box.addWidget(self.table)
             self.frame.setLayout(self.group_box)
@@ -96,10 +131,21 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
             self.table.horizontalHeaderItem(3).setTextAlignment(Qt.AlignHCenter)
 
             for i in range(len(a)):
-                self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(a[i][0]), Qt.AlignCenter))
-                self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(a[i][1]), Qt.AlignCenter))
-                self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(a[i][2]), Qt.AlignCenter))
-                self.table.setItem(i, 3, QtWidgets.QTableWidgetItem(str(a[i][3]), Qt.AlignCenter))
+                item1 = QtWidgets.QTableWidgetItem(str(a[i][0]))
+                item1.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
+                self.table.setItem(i, 0, item1)
+
+                item2 = QtWidgets.QTableWidgetItem(str(a[i][1]))
+                item2.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
+                self.table.setItem(i, 1, item2)
+
+                item3 = QtWidgets.QTableWidgetItem(str(a[i][2]))
+                item3.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
+                self.table.setItem(i, 2, item3)
+
+                item4 = QtWidgets.QTableWidgetItem(str(a[i][3]))
+                item4.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
+                self.table.setItem(i, 3, item4)
 
             self.group_box.addWidget(self.table)
             self.frame.setLayout(self.group_box)
