@@ -1,4 +1,4 @@
-# import psycopg2
+import psycopg2
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
 import sys
@@ -13,8 +13,9 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.combo.currentIndexChanged.connect(self.chng)
 
+        a = self.sort_by_cost()
         self.table.setColumnCount(4)  # Set three columns
-        self.table.setRowCount(40)
+        self.table.setRowCount(len(a))
         self.table.setHorizontalHeaderLabels(["Имя", "Категория", "Дата", "Стоимость"])
 
         self.table.horizontalHeaderItem(0).setToolTip("Column 1 ")
@@ -32,11 +33,11 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         self.table.horizontalHeaderItem(2).setTextAlignment(Qt.AlignHCenter)
         self.table.horizontalHeaderItem(3).setTextAlignment(Qt.AlignHCenter)
 
-        for i in range(40):
-            self.table.setItem(i, 0, QtWidgets.QTableWidgetItem('Куртка', Qt.AlignCenter))
-            self.table.setItem(i, 1, QtWidgets.QTableWidgetItem('Одежда', Qt.AlignCenter))
-            self.table.setItem(i, 2, QtWidgets.QTableWidgetItem('12-3-2023', Qt.AlignCenter))
-            self.table.setItem(i, 3, QtWidgets.QTableWidgetItem('5000', Qt.AlignCenter))
+        for i in range(len(a)):
+            self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(a[i][0]), Qt.AlignCenter))
+            self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(a[i][1]), Qt.AlignCenter))
+            self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(a[i][2]), Qt.AlignCenter))
+            self.table.setItem(i, 3, QtWidgets.QTableWidgetItem(str(a[i][3]), Qt.AlignCenter))
 
         self.group_box.addWidget(self.table)
         self.frame.setLayout(self.group_box)
@@ -44,8 +45,9 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
     def chng(self):
 
         if self.combo.currentIndex() == 0:
+            a = self.sort_by_cost()
             self.table.setColumnCount(4)  # Set three columns
-            self.table.setRowCount(40)
+            self.table.setRowCount(len(a))
             self.table.setHorizontalHeaderLabels(["Имя", "Категория", "Дата", "Стоимость"])
 
             self.table.horizontalHeaderItem(0).setToolTip("Column 1 ")
@@ -63,18 +65,19 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
             self.table.horizontalHeaderItem(2).setTextAlignment(Qt.AlignHCenter)
             self.table.horizontalHeaderItem(3).setTextAlignment(Qt.AlignHCenter)
 
-            for i in range(40):
-                self.table.setItem(i, 0, QtWidgets.QTableWidgetItem('Куртка', Qt.AlignCenter))
-                self.table.setItem(i, 1, QtWidgets.QTableWidgetItem('Одежда', Qt.AlignCenter))
-                self.table.setItem(i, 2, QtWidgets.QTableWidgetItem('12-3-2023', Qt.AlignCenter))
-                self.table.setItem(i, 3, QtWidgets.QTableWidgetItem('5000', Qt.AlignCenter))
+            for i in range(len(a)):
+                self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(a[i][0]), Qt.AlignCenter))
+                self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(a[i][1]), Qt.AlignCenter))
+                self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(a[i][2]), Qt.AlignCenter))
+                self.table.setItem(i, 3, QtWidgets.QTableWidgetItem(str(a[i][3]), Qt.AlignCenter))
 
             self.group_box.addWidget(self.table)
             self.frame.setLayout(self.group_box)
 
         elif self.combo.currentIndex() == 1:
+            a = self.sort_by_cost_reverse()
             self.table.setColumnCount(4)  # Set three columns
-            self.table.setRowCount(40)
+            self.table.setRowCount(len(a))
             self.table.setHorizontalHeaderLabels(["Имя", "Категория", "Дата", "Стоимость"])
 
             self.table.horizontalHeaderItem(0).setToolTip("Column 1 ")
@@ -92,11 +95,11 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
             self.table.horizontalHeaderItem(2).setTextAlignment(Qt.AlignHCenter)
             self.table.horizontalHeaderItem(3).setTextAlignment(Qt.AlignHCenter)
 
-            for i in range(40):
-                self.table.setItem(i, 0, QtWidgets.QTableWidgetItem('Носки', Qt.AlignCenter))
-                self.table.setItem(i, 1, QtWidgets.QTableWidgetItem('Одежда', Qt.AlignCenter))
-                self.table.setItem(i, 2, QtWidgets.QTableWidgetItem('12-3-2023', Qt.AlignCenter))
-                self.table.setItem(i, 3, QtWidgets.QTableWidgetItem('300', Qt.AlignCenter))
+            for i in range(len(a)):
+                self.table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(a[i][0]), Qt.AlignCenter))
+                self.table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(a[i][1]), Qt.AlignCenter))
+                self.table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(a[i][2]), Qt.AlignCenter))
+                self.table.setItem(i, 3, QtWidgets.QTableWidgetItem(str(a[i][3]), Qt.AlignCenter))
 
             self.group_box.addWidget(self.table)
             self.frame.setLayout(self.group_box)
@@ -125,7 +128,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
             port='5432'
         )
         cur = con.cursor()
-        last_id = int(get_last_id()) + 1
+        last_id = int(self.get_last_id()) + 1
         cur.execute("INSERT INTO Control_money (id, name, category, date, cost) VALUES (%s, %s, %s, %s, %s)",
                     (last_id, name, category, date, int(cost),))
 
