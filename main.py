@@ -77,47 +77,10 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.addButton.clicked.connect(self.show_add_window)
 
+        self.a = self.sort_by_cost()
+
         self.combo.currentIndexChanged.connect(self.chng)
-
-        a = self.sort_by_cost()
-        self.table.setColumnCount(4)  # Set three columns
-        self.table.setRowCount(len(a))
-        self.table.setHorizontalHeaderLabels(["Имя", "Категория", "Дата", "Стоимость"])
-
-        self.table.horizontalHeaderItem(0).setToolTip("Column 1 ")
-        self.table.horizontalHeaderItem(1).setToolTip("Column 2 ")
-        self.table.horizontalHeaderItem(2).setToolTip("Column 3 ")
-        self.table.horizontalHeaderItem(3).setToolTip("Column 4 ")
-
-        self.table.setColumnWidth(0, 177)
-        self.table.setColumnWidth(1, 175)
-        self.table.setColumnWidth(2, 175)
-        self.table.setColumnWidth(3, 175)
-
-        self.table.horizontalHeaderItem(0).setTextAlignment(Qt.AlignHCenter)
-        self.table.horizontalHeaderItem(1).setTextAlignment(Qt.AlignHCenter)
-        self.table.horizontalHeaderItem(2).setTextAlignment(Qt.AlignHCenter)
-        self.table.horizontalHeaderItem(3).setTextAlignment(Qt.AlignHCenter)
-
-        for i in range(len(a)):
-            item1 = QtWidgets.QTableWidgetItem(str(a[i][0]))
-            item1.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
-            self.table.setItem(i, 0, item1)
-
-            item2 = QtWidgets.QTableWidgetItem(str(a[i][1]))
-            item2.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
-            self.table.setItem(i, 1, item2)
-
-            item3 = QtWidgets.QTableWidgetItem(str(a[i][2]))
-            item3.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
-            self.table.setItem(i, 2, item3)
-
-            item4 = QtWidgets.QTableWidgetItem(str(a[i][3]))
-            item4.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
-            self.table.setItem(i, 3, item4)
-
-        self.group_box.addWidget(self.table)
-        self.frame.setLayout(self.group_box)
+        self.chng()
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Return:
@@ -126,11 +89,14 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
             elif self.textEdit_2.toPlainText() != '':
                 self.label_5.hide()
                 print('sbn')
-                self.search_by_category(self.textEdit_2.toPlainText())
+                self.a = self.search_by_category(self.textEdit_2.toPlainText())
+                self.chng()
             elif self.textEdit.toPlainText() != '':
                 print('sbn2')
                 self.label_5.hide()
-                self.search_by_date(self.textEdit.toPlainText())
+                self.a = self.search_by_date(self.textEdit.toPlainText())
+                self.chng()
+
 
     def show_add_window(self):
         self.s.show()
@@ -148,7 +114,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         # per = cur.execute('''CREATE  table Control_money( id INTEGER, name VARCHAR(50), category VARCHAR(50), cost INTEGER);''')
         # per = cur.execute(
         #    '''INSERT INTO Control_money (id, name, category, cost) VALUES ('1', 'куртка', 'одежда', '7000');''')
-        per = cur.execute('''SELECT name, category, date, cost FROM Control_money WHERE category = %s''', (category,))
+        per = cur.execute('''SELECT name, category, date, cost FROM Control_money WHERE category = %s ORDER BY cost''', (category,))
 
         a = cur.fetchall()
         con.commit()
@@ -170,7 +136,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         # per = cur.execute('''CREATE  table Control_money( id INTEGER, name VARCHAR(50), category VARCHAR(50), cost INTEGER);''')
         # per = cur.execute(
         #    '''INSERT INTO Control_money (id, name, category, cost) VALUES ('1', 'куртка', 'одежда', '7000');''')
-        per = cur.execute('''SELECT name, category, date, cost FROM Control_money WHERE date = %s''',
+        per = cur.execute('''SELECT name, category, date, cost FROM Control_money WHERE date = %s ORDER BY cost''',
                           (date,))
 
         a = cur.fetchall()
@@ -180,12 +146,10 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         return a
 
     def chng(self):
-        print('frensadksdf')
         print(self.combo.currentIndex())
         if self.combo.currentIndex() == 0:
-            a = self.sort_by_cost()
             self.table.setColumnCount(4)  # Set three columns
-            self.table.setRowCount(len(a))
+            self.table.setRowCount(len(self.a))
             self.table.setHorizontalHeaderLabels(["Имя", "Категория", "Дата", "Стоимость"])
 
             self.table.horizontalHeaderItem(0).setToolTip("Column 1 ")
@@ -203,20 +167,20 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
             self.table.horizontalHeaderItem(2).setTextAlignment(Qt.AlignHCenter)
             self.table.horizontalHeaderItem(3).setTextAlignment(Qt.AlignHCenter)
 
-            for i in range(len(a)):
-                item1 = QtWidgets.QTableWidgetItem(str(a[i][0]))
+            for i in range(len(self.a)):
+                item1 = QtWidgets.QTableWidgetItem(str(self.a[i][0]))
                 item1.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
                 self.table.setItem(i, 0, item1)
 
-                item2 = QtWidgets.QTableWidgetItem(str(a[i][1]))
+                item2 = QtWidgets.QTableWidgetItem(str(self.a[i][1]))
                 item2.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
                 self.table.setItem(i, 1, item2)
 
-                item3 = QtWidgets.QTableWidgetItem(str(a[i][2]))
+                item3 = QtWidgets.QTableWidgetItem(str(self.a[i][2]))
                 item3.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
                 self.table.setItem(i, 2, item3)
 
-                item4 = QtWidgets.QTableWidgetItem(str(a[i][3]))
+                item4 = QtWidgets.QTableWidgetItem(str(self.a[i][3]))
                 item4.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
                 self.table.setItem(i, 3, item4)
 
@@ -224,9 +188,9 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
             self.frame.setLayout(self.group_box)
 
         elif self.combo.currentIndex() == 1:
-            a = self.sort_by_cost_reverse()
+            self.a.reverse()
             self.table.setColumnCount(4)  # Set three columns
-            self.table.setRowCount(len(a))
+            self.table.setRowCount(len(self.a))
             self.table.setHorizontalHeaderLabels(["Имя", "Категория", "Дата", "Стоимость"])
 
             self.table.horizontalHeaderItem(0).setToolTip("Column 1 ")
@@ -244,25 +208,26 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
             self.table.horizontalHeaderItem(2).setTextAlignment(Qt.AlignHCenter)
             self.table.horizontalHeaderItem(3).setTextAlignment(Qt.AlignHCenter)
 
-            for i in range(len(a)):
-                item1 = QtWidgets.QTableWidgetItem(str(a[i][0]))
+            for i in range(len(self.a)):
+                item1 = QtWidgets.QTableWidgetItem(str(self.a[i][0]))
                 item1.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
                 self.table.setItem(i, 0, item1)
 
-                item2 = QtWidgets.QTableWidgetItem(str(a[i][1]))
+                item2 = QtWidgets.QTableWidgetItem(str(self.a[i][1]))
                 item2.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
                 self.table.setItem(i, 1, item2)
 
-                item3 = QtWidgets.QTableWidgetItem(str(a[i][2]))
+                item3 = QtWidgets.QTableWidgetItem(str(self.a[i][2]))
                 item3.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
                 self.table.setItem(i, 2, item3)
 
-                item4 = QtWidgets.QTableWidgetItem(str(a[i][3]))
+                item4 = QtWidgets.QTableWidgetItem(str(self.a[i][3]))
                 item4.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
                 self.table.setItem(i, 3, item4)
 
             self.group_box.addWidget(self.table)
             self.frame.setLayout(self.group_box)
+            self.a.reverse()
 
     def get_last_id(self):
         con = psycopg2.connect(
