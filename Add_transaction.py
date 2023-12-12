@@ -16,7 +16,7 @@ class Ui_Dialog(object):
         Dialog.setObjectName("Dialog")
         Dialog.resize(784, 442)
         Dialog.setWindowIcon(QtGui.QIcon('icon.png'))
-        self.textEdit = QtWidgets.QTextEdit(Dialog)
+        self.textEdit = QtWidgets.QLineEdit(Dialog)
         self.textEdit.setGeometry(QtCore.QRect(360, 120, 221, 31))
         font = QtGui.QFont()
         font.setPointSize(13)
@@ -76,7 +76,7 @@ class Ui_Dialog(object):
         self.label_6.setStyleSheet("color: red")
         self.label_6.hide()
 
-        self.textEdit_2 = QtWidgets.QTextEdit(Dialog)
+        self.textEdit_2 = QtWidgets.QLineEdit(Dialog)
         self.textEdit_2.setGeometry(QtCore.QRect(360, 260, 221, 31))
         font = QtGui.QFont()
         font.setPointSize(13)

@@ -16,8 +16,10 @@ class SecondWindow(QtWidgets.QMainWindow, Ui_Dialog):
 
     def submit(self):
         print(1)
-        self.text1 = self.textEdit.toPlainText()
-        self.text2 = self.textEdit_2.toPlainText()
+        self.label_5.hide()
+        self.label_6.hide()
+        self.text1 = self.textEdit.text()
+        self.text2 = self.textEdit_2.text()
         self.combotext = self.comboBox1.currentText()
         print(self.text1, self.text2, self.combotext)
         if self.text1 == '' and self.text2 == '':
@@ -36,6 +38,10 @@ class SecondWindow(QtWidgets.QMainWindow, Ui_Dialog):
             except:
                 self.label_6.setText("Введите число!!!")
                 self.label_6.show()
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Return:
+            self.submit()
 
     def get_last_id(self):
         con = psycopg2.connect(
@@ -76,6 +82,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.setupUi(self)
         self.addButton.clicked.connect(self.show_add_window)
+        self.clear_sortbutton.clicked.connect(self.clear_sorting)
 
         self.a = self.sort_by_cost()
 
@@ -84,22 +91,61 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Return:
-            if self.textEdit.toPlainText() != '' and self.textEdit_2.toPlainText() != '':
+            if self.textEdit.text() != '' and self.textEdit_2.text() != '':
                 self.label_5.show()
-            elif self.textEdit_2.toPlainText() != '':
+            elif self.textEdit_2.text() != '':
                 self.label_5.hide()
                 print('sbn')
-                self.a = self.search_by_category(self.textEdit_2.toPlainText())
+                self.a = self.search_by_category(self.textEdit_2.text())
+                self.clear_sortbutton.show()
                 self.chng()
-            elif self.textEdit.toPlainText() != '':
+            elif self.textEdit.text() != '':
                 print('sbn2')
                 self.label_5.hide()
-                self.a = self.search_by_date(self.textEdit.toPlainText())
+                self.a = self.search_by_date(self.textEdit.text())
+                self.clear_sortbutton.show()
                 self.chng()
-
+        elif event.key() == Qt.Key_Backspace:
+            try:
+                row_index = self.table.currentIndex().row()
+                x = []
+                for i in range(4):
+                    x.append(self.table.item(row_index, i).text())
+                print(x)
+                self.table.removeRow(row_index)
+                self.delete_transaction(x[0], x[1], x[3])
+                x = []
+            except:
+                pass
 
     def show_add_window(self):
         self.s.show()
+
+    def clear_sorting(self):
+        self.textEdit.clear()
+        self.textEdit_2.clear()
+        self.clear_sortbutton.hide()
+        self.a = self.sort_by_cost()
+        self.chng()
+
+    def delete_transaction(self, name, category, cost):
+        con = psycopg2.connect(
+            database='testuser',
+            user='postgres',
+            password='MaximRozov24',
+            host='localhost',
+            port='5432'
+        )
+
+        cur = con.cursor()
+        # per = cur.execute('''CREATE  table Control_money( id INTEGER, name VARCHAR(50), category VARCHAR(50), cost INTEGER);''')
+        # per = cur.execute(
+        #    '''INSERT INTO Control_money (id, name, category, cost) VALUES ('1', 'куртка', 'одежда', '7000');''')
+        per = cur.execute('''DELETE FROM Control_money WHERE name = %s AND  category = %s''',
+                          (name, category,))
+
+        con.commit()
+        con.close()
 
     def search_by_category(self, category):
         con = psycopg2.connect(
@@ -114,7 +160,8 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         # per = cur.execute('''CREATE  table Control_money( id INTEGER, name VARCHAR(50), category VARCHAR(50), cost INTEGER);''')
         # per = cur.execute(
         #    '''INSERT INTO Control_money (id, name, category, cost) VALUES ('1', 'куртка', 'одежда', '7000');''')
-        per = cur.execute('''SELECT name, category, date, cost FROM Control_money WHERE category = %s ORDER BY cost''', (category,))
+        per = cur.execute('''SELECT name, category, date, cost FROM Control_money WHERE category = %s ORDER BY cost''',
+                          (category,))
 
         a = cur.fetchall()
         con.commit()
