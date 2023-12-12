@@ -90,6 +90,15 @@ class Ui_MainWindow(object):
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
 
+        self.label_5 = QtWidgets.QLabel(self.centralwidget)
+        self.label_5.setGeometry(QtCore.QRect(332, 400, 311, 101))
+        font = QtGui.QFont()
+        font.setPointSize(13)
+        self.label_5.setFont(font)
+        self.label_5.setObjectName("label_5")
+        self.label_5.setStyleSheet("color: red")
+        self.label_5.hide()
+
         self.combo = QtWidgets.QComboBox(self.centralwidget)
         self.combo.setGeometry(QtCore.QRect(800, 120, 161, 30))
         self.combo.addItem(" возрастанию")
@@ -121,8 +130,4 @@ class Ui_MainWindow(object):
         self.label_2.setText(_translate("MainWindow", "Поиск по дате:"))
         self.label_3.setText(_translate("MainWindow", "Поиск по категории:"))
         self.label_4.setText(_translate("MainWindow", "Отсортировано по"))
-
-
-
-
-
+        self.label_5.setText(_translate("MainWindow", "Выберите один критерий поиска!!!"))

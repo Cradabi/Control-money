@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(684, 442)
+        Dialog.resize(784, 442)
         Dialog.setWindowIcon(QtGui.QIcon('icon.png'))
         self.textEdit = QtWidgets.QTextEdit(Dialog)
         self.textEdit.setGeometry(QtCore.QRect(360, 120, 221, 31))
@@ -22,6 +22,7 @@ class Ui_Dialog(object):
         font.setPointSize(13)
         self.textEdit.setFont(font)
         self.textEdit.setObjectName("textEdit")
+
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(190, 20, 301, 71))
         font = QtGui.QFont()
@@ -56,6 +57,25 @@ class Ui_Dialog(object):
         font.setPointSize(13)
         self.label_4.setFont(font)
         self.label_4.setObjectName("label_4")
+
+        self.label_5 = QtWidgets.QLabel(Dialog)
+        self.label_5.setGeometry(QtCore.QRect(630, 120, 241, 31))
+        font = QtGui.QFont()
+        font.setPointSize(13)
+        self.label_5.setFont(font)
+        self.label_5.setObjectName("label_5")
+        self.label_5.setStyleSheet("color: red")
+        self.label_5.hide()
+
+        self.label_6 = QtWidgets.QLabel(Dialog)
+        self.label_6.setGeometry(QtCore.QRect(630, 260, 241, 31))
+        font = QtGui.QFont()
+        font.setPointSize(13)
+        self.label_6.setFont(font)
+        self.label_6.setObjectName("label_6")
+        self.label_6.setStyleSheet("color: red")
+        self.label_6.hide()
+
         self.textEdit_2 = QtWidgets.QTextEdit(Dialog)
         self.textEdit_2.setGeometry(QtCore.QRect(360, 260, 221, 31))
         font = QtGui.QFont()
@@ -83,4 +103,6 @@ class Ui_Dialog(object):
         self.comboBox1.setItemText(3, _translate("Dialog", "Медицина"))
         self.label_3.setText(_translate("Dialog", "Добавте категорию:"))
         self.label_4.setText(_translate("Dialog", "Введите стоимость:"))
+        self.label_5.setText(_translate("Dialog", "Введите имя!!!"))
+        self.label_6.setText(_translate("Dialog", "Введите цену!!!"))
         self.subButton.setText(_translate("Dialog", "Добавить транзакцию"))
