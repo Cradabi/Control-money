@@ -10,6 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
+import qdarktheme
 
 
 class Ui_MainWindow(object):
@@ -22,6 +23,8 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(1)
         sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
+        qdarktheme.setup_theme("auto")
+        self.theme = 'light'
 
         font = QtGui.QFont()
         font.setPointSize(24)

@@ -6,6 +6,7 @@ import datetime
 
 from Main_Window import Ui_MainWindow
 from Add_transaction import Ui_Dialog
+import qdarktheme
 
 
 class SecondWindow(QtWidgets.QMainWindow, Ui_Dialog):
@@ -102,9 +103,14 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
             elif self.textEdit.text() != '':
                 print('sbn2')
                 self.label_5.hide()
-                self.a = self.search_by_date(self.textEdit.text())
-                self.clear_sortbutton.show()
-                self.chng()
+                try:
+                    self.a = self.search_by_date(self.textEdit.text())
+                    self.clear_sortbutton.show()
+                    self.chng()
+                except:
+                    print("sdgx")
+                    self.label_5.setText("Вы ввели некорректную дату")
+                    self.label_5.show()
         elif event.key() == Qt.Key_Backspace:
             try:
                 row_index = self.table.currentIndex().row()
@@ -117,6 +123,13 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
                 x = []
             except:
                 pass
+        elif event.key() == Qt.Key_1:
+            if self.theme == 'light':
+                qdarktheme.setup_theme('dark')
+                self.theme = 'dark'
+            elif self.theme == 'dark':
+                qdarktheme.setup_theme('light')
+                self.theme = 'light'
 
     def show_add_window(self):
         self.s.show()
@@ -204,7 +217,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
             self.table.horizontalHeaderItem(2).setToolTip("Column 3 ")
             self.table.horizontalHeaderItem(3).setToolTip("Column 4 ")
 
-            self.table.setColumnWidth(0, 177)
+            self.table.setColumnWidth(0, 174)
             self.table.setColumnWidth(1, 175)
             self.table.setColumnWidth(2, 175)
             self.table.setColumnWidth(3, 175)
@@ -245,7 +258,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
             self.table.horizontalHeaderItem(2).setToolTip("Column 3 ")
             self.table.horizontalHeaderItem(3).setToolTip("Column 4 ")
 
-            self.table.setColumnWidth(0, 177)
+            self.table.setColumnWidth(0, 174)
             self.table.setColumnWidth(1, 175)
             self.table.setColumnWidth(2, 175)
             self.table.setColumnWidth(3, 175)
