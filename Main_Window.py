@@ -23,7 +23,7 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(1)
         sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
-        qdarktheme.setup_theme("auto")
+        qdarktheme.setup_theme("light")
         self.theme = 'light'
 
         font = QtGui.QFont()
@@ -148,7 +148,7 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", " Контроль денег"))
         self.addButton.setText(_translate("MainWindow", "+"))
         self.clear_sortbutton.setText(_translate("MainWindow", "Очистить поиск"))
-        self.label_2.setText(_translate("MainWindow", "Поиск по дате:"))
-        self.label_3.setText(_translate("MainWindow", "Поиск по категории:"))
+        self.label_2.setText(_translate("MainWindow", "Поиск по дате"))
+        self.label_3.setText(_translate("MainWindow", "Поиск по категории"))
         self.label_4.setText(_translate("MainWindow", "Отсортировано по"))
         self.label_5.setText(_translate("MainWindow", "Выберите один критерий поиска!!!"))

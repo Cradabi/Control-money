@@ -74,7 +74,7 @@ class Ui_Dialog(object):
         self.label_5.hide()
 
         self.label_6 = QtWidgets.QLabel(Dialog)
-        self.label_6.setGeometry(QtCore.QRect(630, 260, 241, 31))
+        self.label_6.setGeometry(QtCore.QRect(200, 300, 341, 31))
         font = QtGui.QFont()
         font.setPointSize(13)
         self.label_6.setFont(font)

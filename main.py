@@ -33,11 +33,26 @@ class SecondWindow(QtWidgets.QMainWindow, Ui_Dialog):
         else:
             try:
                 self.int_text_2 = int(self.text2)
+                if self.int_text_2 <= 0:
+                    raise Exception
                 datetime_obj = datetime.date.today()
                 self.add_transaction(self.text1, self.combotext, datetime_obj, self.int_text_2)
+                if application.searching_category != '':
+                    s_c = application.searching_category.lower()
+                    s_c = s_c.capitalize()
+                    application.a = application.search_by_category(s_c)
+                    application.chng()
+                elif application.searching_date != '':
+                    application.a = application.search_by_date(application.searching_date)
+                    application.chng()
+                else:
+                    application.a = application.sort_by_cost()
+                    application.chng()
+                self.textEdit.setText('')
+                self.textEdit_2.setText('')
                 self.close()
             except:
-                self.label_6.setText("Введите число!!!")
+                self.label_6.setText("Введите положительное число!!!")
                 self.label_6.show()
 
     def keyPressEvent(self, event):
@@ -81,6 +96,9 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         super(Main, self).__init__()
         self.s = SecondWindow()
 
+        self.searching_date = ''
+        self.searching_category = ''
+
         self.setupUi(self)
         self.addButton.clicked.connect(self.show_add_window)
         self.clear_sortbutton.clicked.connect(self.clear_sorting)
@@ -97,7 +115,10 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
             elif self.textEdit_2.text() != '':
                 self.label_5.hide()
                 print('sbn')
-                self.a = self.search_by_category(self.textEdit_2.text())
+                s_c = self.textEdit_2.text().lower()
+                s_c = s_c.capitalize()
+                self.a = self.search_by_category(s_c)
+                self.searching_category = self.textEdit_2.text()
                 self.clear_sortbutton.show()
                 self.chng()
             elif self.textEdit.text() != '':
@@ -105,6 +126,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.label_5.hide()
                 try:
                     self.a = self.search_by_date(self.textEdit.text())
+                    self.searching_date = self.textEdit.text()
                     self.clear_sortbutton.show()
                     self.chng()
                 except:
@@ -120,6 +142,17 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
                 print(x)
                 self.table.removeRow(row_index)
                 self.delete_transaction(x[0], x[1], x[3])
+                if self.searching_category != '':
+                    s_c = self.searching_category.lower()
+                    s_c = s_c.capitalize()
+                    self.a = self.search_by_category(s_c)
+                    self.chng()
+                elif self.searching_date != '':
+                    self.a = self.search_by_date(self.searching_date)
+                    self.chng()
+                else:
+                    self.a = self.sort_by_cost()
+                    self.chng()
                 x = []
             except:
                 pass
@@ -138,6 +171,8 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         self.textEdit.clear()
         self.textEdit_2.clear()
         self.clear_sortbutton.hide()
+        self.searching_date = ''
+        self.searching_category = ''
         self.a = self.sort_by_cost()
         self.chng()
 
@@ -336,27 +371,6 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         # per = cur.execute(
         #    '''INSERT INTO Control_money (id, name, category, cost) VALUES ('1', 'куртка', 'одежда', '7000');''')
         per = cur.execute('''SELECT name, category, date, cost FROM Control_money ORDER BY cost''')
-
-        a = cur.fetchall()
-        con.commit()
-        con.close()
-        print(a)
-        return a
-
-    def sort_by_cost_reverse(self):
-        con = psycopg2.connect(
-            database='testuser',
-            user='postgres',
-            password='MaximRozov24',
-            host='localhost',
-            port='5432'
-        )
-
-        cur = con.cursor()
-        # per = cur.execute('''CREATE  table Control_money( id INTEGER, name VARCHAR(50), category VARCHAR(50), cost INTEGER);''')
-        # per = cur.execute(
-        #    '''INSERT INTO Control_money (id, name, category, cost) VALUES ('1', 'куртка', 'одежда', '7000');''')
-        per = cur.execute('''SELECT name, category, date, cost FROM Control_money ORDER BY cost DESC''')
 
         a = cur.fetchall()
         con.commit()
