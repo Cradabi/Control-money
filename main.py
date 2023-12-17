@@ -153,7 +153,6 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
                 else:
                     self.a = self.sort_by_cost()
                     self.chng()
-                x = []
             except:
                 pass
         elif event.key() == Qt.Key_1:
@@ -186,9 +185,6 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         )
 
         cur = con.cursor()
-        # per = cur.execute('''CREATE  table Control_money( id INTEGER, name VARCHAR(50), category VARCHAR(50), cost INTEGER);''')
-        # per = cur.execute(
-        #    '''INSERT INTO Control_money (id, name, category, cost) VALUES ('1', 'куртка', 'одежда', '7000');''')
         per = cur.execute('''DELETE FROM Control_money WHERE name = %s AND  category = %s''',
                           (name, category,))
 
@@ -205,9 +201,6 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         )
 
         cur = con.cursor()
-        # per = cur.execute('''CREATE  table Control_money( id INTEGER, name VARCHAR(50), category VARCHAR(50), cost INTEGER);''')
-        # per = cur.execute(
-        #    '''INSERT INTO Control_money (id, name, category, cost) VALUES ('1', 'куртка', 'одежда', '7000');''')
         per = cur.execute('''SELECT name, category, date, cost FROM Control_money WHERE category = %s ORDER BY cost''',
                           (category,))
 
@@ -228,9 +221,6 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         )
 
         cur = con.cursor()
-        # per = cur.execute('''CREATE  table Control_money( id INTEGER, name VARCHAR(50), category VARCHAR(50), cost INTEGER);''')
-        # per = cur.execute(
-        #    '''INSERT INTO Control_money (id, name, category, cost) VALUES ('1', 'куртка', 'одежда', '7000');''')
         per = cur.execute('''SELECT name, category, date, cost FROM Control_money WHERE date = %s ORDER BY cost''',
                           (date,))
 
@@ -367,9 +357,6 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         )
 
         cur = con.cursor()
-        # per = cur.execute('''CREATE  table Control_money( id INTEGER, name VARCHAR(50), category VARCHAR(50), cost INTEGER);''')
-        # per = cur.execute(
-        #    '''INSERT INTO Control_money (id, name, category, cost) VALUES ('1', 'куртка', 'одежда', '7000');''')
         per = cur.execute('''SELECT name, category, date, cost FROM Control_money ORDER BY cost''')
 
         a = cur.fetchall()
