@@ -16,7 +16,7 @@ import qdarktheme
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.setFixedSize(1000, 600)
+        MainWindow.setFixedSize(1100, 600)
         MainWindow.setWindowIcon(QtGui.QIcon('icon.png'))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
@@ -38,11 +38,11 @@ class Ui_MainWindow(object):
         self.table.setSelectionMode(QtWidgets.QTableWidget.ExtendedSelection)
 
         self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setGeometry(QtCore.QRect(110, 150, 761, 291))
+        self.frame.setGeometry(QtCore.QRect(110, 150, 861, 291))
         self.frame.setFixedHeight(280)
         self.frame.setObjectName("scrollArea")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(270, 20, 471, 61))
+        self.label.setGeometry(QtCore.QRect(320, 20, 471, 61))
         font = QtGui.QFont()
         font.setPointSize(24)
 
@@ -50,7 +50,7 @@ class Ui_MainWindow(object):
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
         self.addButton = QtWidgets.QPushButton(self.centralwidget)
-        self.addButton.setGeometry(QtCore.QRect(832, 451, 111, 101))
+        self.addButton.setGeometry(QtCore.QRect(932, 451, 111, 101))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

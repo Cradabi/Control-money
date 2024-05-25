@@ -1,6 +1,7 @@
 import psycopg2
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QPushButton, QTableWidgetItem
 import sys
 import datetime
 
@@ -38,14 +39,14 @@ class SecondWindow(QtWidgets.QMainWindow, Ui_Dialog):
                         self.add_transaction(self.text1, self.combotext, datetime_obj, self.int_text_2)
                     else:
                         datetime_obj = datetime.date.today()
-                        self.add_transaction(self.text1, self.combotext, datetime_obj, self.int_text_2*(-1))
+                        self.add_transaction(self.text1, self.combotext, datetime_obj, self.int_text_2 * (-1))
                 else:
                     if self.int_text_2 <= 0:
                         datetime_obj = datetime.date.today()
                         self.add_transaction(self.text1, self.combotext, datetime_obj, self.int_text_2)
                     else:
                         datetime_obj = datetime.date.today()
-                        self.add_transaction(self.text1, self.combotext, datetime_obj, self.int_text_2*(-1))
+                        self.add_transaction(self.text1, self.combotext, datetime_obj, self.int_text_2 * (-1))
                 if application.searching_category != '':
                     s_c = application.searching_category.lower()
                     s_c = s_c.capitalize()
@@ -122,7 +123,6 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.label_5.show()
             elif self.textEdit_2.text() != '':
                 self.label_5.hide()
-                print('sbn')
                 s_c = self.textEdit_2.text().lower()
                 s_c = s_c.capitalize()
                 self.a = self.search_by_category(s_c)
@@ -130,7 +130,6 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.clear_sortbutton.show()
                 self.chng()
             elif self.textEdit.text() != '':
-                print('sbn2')
                 self.label_5.hide()
                 try:
                     self.a = self.search_by_date(self.textEdit.text())
@@ -138,7 +137,6 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.clear_sortbutton.show()
                     self.chng()
                 except:
-                    print("sdgx")
                     self.label_5.setText("Вы ввели некорректную дату")
                     self.label_5.show()
         elif event.key() == Qt.Key_Backspace:
@@ -181,6 +179,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         self.searching_date = ''
         self.searching_category = ''
         self.a = self.sort_by_cost()
+        self.label_5.hide()
         self.chng()
 
     def delete_transaction(self, name, category, cost):
@@ -236,28 +235,54 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         con.close()
         return a
 
+    def delete_by_but(self, row_index):
+        print(row_index)
+        try:
+            x = []
+            for i in range(4):
+                x.append(self.table.item(row_index, i).text())
+            print(x)
+            self.table.removeRow(row_index)
+            self.delete_transaction(x[0], x[1], x[3])
+            if self.searching_category != '':
+                s_c = self.searching_category.lower()
+                s_c = s_c.capitalize()
+                self.a = self.search_by_category(s_c)
+                self.chng()
+            elif self.searching_date != '':
+                self.a = self.search_by_date(self.searching_date)
+                self.chng()
+            else:
+                self.a = self.sort_by_cost()
+                self.chng()
+        except:
+            pass
+
     def chng(self):
         print(self.combo.currentIndex())
         self.balance = 0
         if self.combo.currentIndex() == 0:
-            self.table.setColumnCount(4)  # Set three columns
+            self.table.setColumnCount(5)
             self.table.setRowCount(len(self.a))
-            self.table.setHorizontalHeaderLabels(["Имя", "Категория", "Дата", "Стоимость"])
+            self.table.setHorizontalHeaderLabels(["Имя", "Категория", "Дата", "Стоимость", "Кнопки"])
 
             self.table.horizontalHeaderItem(0).setToolTip("Column 1 ")
             self.table.horizontalHeaderItem(1).setToolTip("Column 2 ")
             self.table.horizontalHeaderItem(2).setToolTip("Column 3 ")
             self.table.horizontalHeaderItem(3).setToolTip("Column 4 ")
+            self.table.horizontalHeaderItem(4).setToolTip("Column 5 ")
 
             self.table.setColumnWidth(0, 174)
             self.table.setColumnWidth(1, 175)
             self.table.setColumnWidth(2, 175)
             self.table.setColumnWidth(3, 175)
+            self.table.setColumnWidth(4, 100)
 
             self.table.horizontalHeaderItem(0).setTextAlignment(Qt.AlignHCenter)
             self.table.horizontalHeaderItem(1).setTextAlignment(Qt.AlignHCenter)
             self.table.horizontalHeaderItem(2).setTextAlignment(Qt.AlignHCenter)
             self.table.horizontalHeaderItem(3).setTextAlignment(Qt.AlignHCenter)
+            self.table.horizontalHeaderItem(4).setTextAlignment(Qt.AlignHCenter)
 
             for i in range(len(self.a)):
                 item1 = QtWidgets.QTableWidgetItem(str(self.a[i][0]))
@@ -276,31 +301,38 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
                 item4.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
                 self.table.setItem(i, 3, item4)
                 self.balance += self.a[i][3]
+
+                push = QPushButton("&Удалить")
+                push.clicked.connect(lambda _, r=i: self.delete_by_but(r))
+                self.table.setItem(i, 4, QTableWidgetItem())
+                self.table.setCellWidget(i, 4, push)
 
             self.group_box.addWidget(self.table)
             self.frame.setLayout(self.group_box)
             self.label_6.setText("Текущий баланс: " + str(self.balance))
 
         elif self.combo.currentIndex() == 1:
-            self.a.reverse()
-            self.table.setColumnCount(4)  # Set three columns
+            self.table.setColumnCount(5)
             self.table.setRowCount(len(self.a))
-            self.table.setHorizontalHeaderLabels(["Имя", "Категория", "Дата", "Стоимость"])
+            self.table.setHorizontalHeaderLabels(["Имя", "Категория", "Дата", "Стоимость", "Кнопки"])
 
             self.table.horizontalHeaderItem(0).setToolTip("Column 1 ")
             self.table.horizontalHeaderItem(1).setToolTip("Column 2 ")
             self.table.horizontalHeaderItem(2).setToolTip("Column 3 ")
             self.table.horizontalHeaderItem(3).setToolTip("Column 4 ")
+            self.table.horizontalHeaderItem(4).setToolTip("Column 5 ")
 
             self.table.setColumnWidth(0, 174)
             self.table.setColumnWidth(1, 175)
             self.table.setColumnWidth(2, 175)
             self.table.setColumnWidth(3, 175)
+            self.table.setColumnWidth(4, 100)
 
             self.table.horizontalHeaderItem(0).setTextAlignment(Qt.AlignHCenter)
             self.table.horizontalHeaderItem(1).setTextAlignment(Qt.AlignHCenter)
             self.table.horizontalHeaderItem(2).setTextAlignment(Qt.AlignHCenter)
             self.table.horizontalHeaderItem(3).setTextAlignment(Qt.AlignHCenter)
+            self.table.horizontalHeaderItem(4).setTextAlignment(Qt.AlignHCenter)
 
             for i in range(len(self.a)):
                 item1 = QtWidgets.QTableWidgetItem(str(self.a[i][0]))
@@ -319,6 +351,12 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
                 item4.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
                 self.table.setItem(i, 3, item4)
                 self.balance += self.a[i][3]
+
+                push = QPushButton("&Удалить")
+                push.clicked.connect(lambda _, r=i: self.delete_by_but(r))
+                self.table.setItem(i, 4, QTableWidgetItem())
+                self.table.setCellWidget(i, 4, push)
+
             self.group_box.addWidget(self.table)
             self.frame.setLayout(self.group_box)
             self.label_6.setText("Текущий баланс: " + str(self.balance))
