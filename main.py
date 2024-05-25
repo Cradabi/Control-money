@@ -16,7 +16,6 @@ class SecondWindow(QtWidgets.QMainWindow, Ui_Dialog):
         self.subButton.clicked.connect(self.submit)
 
     def submit(self):
-        print(1)
         self.label_5.hide()
         self.label_6.hide()
         self.text1 = self.textEdit.text()
@@ -33,10 +32,20 @@ class SecondWindow(QtWidgets.QMainWindow, Ui_Dialog):
         else:
             try:
                 self.int_text_2 = int(self.text2)
-                if self.int_text_2 <= 0:
-                    raise Exception
-                datetime_obj = datetime.date.today()
-                self.add_transaction(self.text1, self.combotext, datetime_obj, self.int_text_2)
+                if self.combotext == "Пополнение":
+                    if self.int_text_2 >= 0:
+                        datetime_obj = datetime.date.today()
+                        self.add_transaction(self.text1, self.combotext, datetime_obj, self.int_text_2)
+                    else:
+                        datetime_obj = datetime.date.today()
+                        self.add_transaction(self.text1, self.combotext, datetime_obj, self.int_text_2*(-1))
+                else:
+                    if self.int_text_2 <= 0:
+                        datetime_obj = datetime.date.today()
+                        self.add_transaction(self.text1, self.combotext, datetime_obj, self.int_text_2)
+                    else:
+                        datetime_obj = datetime.date.today()
+                        self.add_transaction(self.text1, self.combotext, datetime_obj, self.int_text_2*(-1))
                 if application.searching_category != '':
                     s_c = application.searching_category.lower()
                     s_c = s_c.capitalize()
@@ -67,10 +76,8 @@ class SecondWindow(QtWidgets.QMainWindow, Ui_Dialog):
             host='localhost',
             port='5432'
         )
-
         cur = con.cursor()
-        per1 = cur.execute('''SELECT * FROM Control_money;''')
-
+        per1 = cur.execute('''SELECT * FROM control_money;''')
         a = cur.fetchall()[-1][0]
         return a
 
@@ -84,7 +91,7 @@ class SecondWindow(QtWidgets.QMainWindow, Ui_Dialog):
         )
         cur = con.cursor()
         last_id = int(self.get_last_id()) + 1
-        cur.execute("INSERT INTO Control_money (id, name, category, date, cost) VALUES (%s, %s, %s, %s, %s)",
+        cur.execute("INSERT INTO control_money (id, name, category, date, cost) VALUES (%s, %s, %s, %s, %s)",
                     (last_id, name, category, date, int(cost),))
 
         con.commit()
@@ -95,6 +102,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(Main, self).__init__()
         self.s = SecondWindow()
+        self.balance = 0
 
         self.searching_date = ''
         self.searching_category = ''
@@ -155,7 +163,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.chng()
             except:
                 pass
-        elif event.key() == Qt.Key_1:
+        elif event.key() == Qt.Key_Control:
             if self.theme == 'light':
                 qdarktheme.setup_theme('dark')
                 self.theme = 'dark'
@@ -176,6 +184,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         self.chng()
 
     def delete_transaction(self, name, category, cost):
+        print("delete")
         con = psycopg2.connect(
             database='testuser',
             user='postgres',
@@ -185,9 +194,8 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         )
 
         cur = con.cursor()
-        per = cur.execute('''DELETE FROM Control_money WHERE name = %s AND  category = %s''',
+        per = cur.execute('''DELETE FROM control_money WHERE name = %s AND  category = %s''',
                           (name, category,))
-
         con.commit()
         con.close()
 
@@ -201,13 +209,12 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         )
 
         cur = con.cursor()
-        per = cur.execute('''SELECT name, category, date, cost FROM Control_money WHERE category = %s ORDER BY cost''',
+        per = cur.execute('''SELECT name, category, date, cost FROM control_money WHERE category = %s ORDER BY cost''',
                           (category,))
 
         a = cur.fetchall()
         con.commit()
         con.close()
-        print(a)
         return a
 
     def search_by_date(self, date):
@@ -221,17 +228,17 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         )
 
         cur = con.cursor()
-        per = cur.execute('''SELECT name, category, date, cost FROM Control_money WHERE date = %s ORDER BY cost''',
+        per = cur.execute('''SELECT name, category, date, cost FROM control_money WHERE date = %s ORDER BY cost''',
                           (date,))
 
         a = cur.fetchall()
         con.commit()
         con.close()
-        print(a)
         return a
 
     def chng(self):
         print(self.combo.currentIndex())
+        self.balance = 0
         if self.combo.currentIndex() == 0:
             self.table.setColumnCount(4)  # Set three columns
             self.table.setRowCount(len(self.a))
@@ -268,9 +275,11 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
                 item4 = QtWidgets.QTableWidgetItem(str(self.a[i][3]))
                 item4.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
                 self.table.setItem(i, 3, item4)
+                self.balance += self.a[i][3]
 
             self.group_box.addWidget(self.table)
             self.frame.setLayout(self.group_box)
+            self.label_6.setText("Текущий баланс: " + str(self.balance))
 
         elif self.combo.currentIndex() == 1:
             self.a.reverse()
@@ -309,9 +318,10 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
                 item4 = QtWidgets.QTableWidgetItem(str(self.a[i][3]))
                 item4.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled | Qt.AlignHCenter)
                 self.table.setItem(i, 3, item4)
-
+                self.balance += self.a[i][3]
             self.group_box.addWidget(self.table)
             self.frame.setLayout(self.group_box)
+            self.label_6.setText("Текущий баланс: " + str(self.balance))
             self.a.reverse()
 
     def get_last_id(self):
@@ -324,8 +334,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         )
 
         cur = con.cursor()
-        per1 = cur.execute('''SELECT * FROM Control_money;''')
-
+        per1 = cur.execute('''SELECT * FROM control_money;''')
         a = cur.fetchall()[-1][0]
         con.commit()
         con.close()
@@ -341,9 +350,8 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         )
         cur = con.cursor()
         last_id = int(self.get_last_id()) + 1
-        cur.execute("INSERT INTO Control_money (id, name, category, date, cost) VALUES (%s, %s, %s, %s, %s)",
+        cur.execute("INSERT INTO control_money (id, name, category, date, cost) VALUES (%s, %s, %s, %s, %s)",
                     (last_id, name, category, date, int(cost),))
-
         con.commit()
         con.close()
 
@@ -357,8 +365,7 @@ class Main(QtWidgets.QMainWindow, Ui_MainWindow):
         )
 
         cur = con.cursor()
-        per = cur.execute('''SELECT name, category, date, cost FROM Control_money ORDER BY cost''')
-
+        per = cur.execute('''SELECT name, category, date, cost FROM control_money ORDER BY cost''')
         a = cur.fetchall()
         con.commit()
         con.close()

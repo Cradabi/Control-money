@@ -16,7 +16,7 @@ import qdarktheme
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1000, 600)
+        MainWindow.setFixedSize(1000, 600)
         MainWindow.setWindowIcon(QtGui.QIcon('icon.png'))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
@@ -119,6 +119,13 @@ class Ui_MainWindow(object):
         self.label_5.setStyleSheet("color: red")
         self.label_5.hide()
 
+        self.label_6 = QtWidgets.QLabel(self.centralwidget)
+        self.label_6.setGeometry(QtCore.QRect(29, 80, 400, 30))
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        self.label_6.setFont(font)
+        self.label_6.setObjectName("label_6")
+
         self.combo = QtWidgets.QComboBox(self.centralwidget)
         self.combo.setGeometry(QtCore.QRect(800, 120, 161, 30))
         self.combo.addItem(" возрастанию")
@@ -152,3 +159,4 @@ class Ui_MainWindow(object):
         self.label_3.setText(_translate("MainWindow", "Поиск по категории"))
         self.label_4.setText(_translate("MainWindow", "Отсортировано по"))
         self.label_5.setText(_translate("MainWindow", "Выберите один критерий поиска!!!"))
+        self.label_6.setText(_translate("MainWindow", "Текущий баланс"))
